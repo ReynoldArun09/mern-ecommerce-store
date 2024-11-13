@@ -37,3 +37,24 @@ declare global {
     }
   }
 }
+
+export interface ICoupon extends Document {
+  code: string;
+  discountPercentage: number;
+  expirationDate: Date;
+  isActive: boolean;
+  customerId: ObjectId;
+}
+
+interface OrdersItems {
+  product: IProduct;
+  quantity: number;
+  price: number;
+}
+
+export interface IOrder extends Document {
+  customer: ObjectId;
+  products: OrdersItems[];
+  totalAmount: number;
+  stripeSessionId: string;
+}
