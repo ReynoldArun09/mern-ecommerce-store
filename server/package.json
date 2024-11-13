@@ -7,7 +7,8 @@
         "build": "tsc",
         "dev": "concurrently \"npx tsc --watch\"  \"nodemon -q -L build/server.js\"",
         "start": "npm run build && node build/server.js",
-        "test": "jest --watchAll --detectOpenHandles"
+        "test": "jest --watchAll --detectOpenHandles",
+        "seed": "ts-node ./src/scripts/seed.ts"
     },
     "keywords": [
         "node",
