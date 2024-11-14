@@ -21,6 +21,10 @@ export interface IProduct extends Document {
   image: string;
   category: string;
   isFeatured: boolean;
+  stock: number;
+  isActive: boolean;
+  targetAudience: string;
+  brand: string;
 }
 type JWTPayloadType = {
   _id: ObjectId;

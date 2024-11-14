@@ -16,9 +16,23 @@ export const GetAllProducts = AsyncWrapper(
   }
 );
 
+export const GetSingleProduct = AsyncWrapper(
+  async (req: Request, res: Response) => {
+    const { productId } = req.params;
+    const product = await Product.findById(productId);
+
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      data: product,
+    });
+  }
+);
+
 export const GetFeaturedProducts = AsyncWrapper(
   async (req: Request, res: Response) => {
-    const featuredProducts = await Product.find({ isFeatured: true }).lean();
+    const featuredProducts = await Product.find({ isFeatured: true })
+      .lean()
+      .limit(8);
 
     if (!featuredProducts) {
       throw new AppError(
@@ -128,6 +142,34 @@ export const GetRecommendedProducts = AsyncWrapper(
     const products = await Product.aggregate([
       { $sample: { size: 4 } },
       { $project: { _id: 1, name: 1, image: 1, description: 1, price: 1 } },
+    ]);
+
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      data: products,
+    });
+  }
+);
+
+export const GetCategoriesAndProductCount = AsyncWrapper(
+  async (req: Request, res: Response) => {
+    const products = await Product.aggregate([
+      {
+        $group: {
+          _id: "$category",
+          productCount: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          category: "$_id",
+          productCount: 1,
+          _id: 0,
+        },
+      },
+      {
+        $limit: 8,
+      },
     ]);
 
     res.status(HttpStatusCode.OK).json({

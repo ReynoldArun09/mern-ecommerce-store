@@ -28,6 +28,20 @@ const productSchema = new mongoose.Schema<IProduct>(
       type: Boolean,
       default: false,
     },
+    brand: {
+      type: String,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+    targetAudience: {
+      type: String,
+      enum: ["Men", "Women", "Accessory"],
+    },
+    stock: {
+      type: Number,
+    },
   },
   {
     timestamps: true,

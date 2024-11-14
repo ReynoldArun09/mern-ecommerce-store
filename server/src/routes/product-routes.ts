@@ -32,3 +32,5 @@ productRoutes.patch(
   AdminMiddleware,
   product.ToggleFeaturedProduct
 );
+productRoutes.get("/category-count", product.GetCategoriesAndProductCount);
+productRoutes.get("/single-product/:productId", product.GetSingleProduct);

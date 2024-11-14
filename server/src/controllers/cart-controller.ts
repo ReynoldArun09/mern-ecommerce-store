@@ -25,7 +25,13 @@ export const GetCartProduct = AsyncWrapper(
 
 export const AddToCart = AsyncWrapper(async (req: Request, res: Response) => {
   const { productId } = req.params;
+
   const existingProduct = await Product.findById(productId);
+  if (!existingProduct) {
+    return res
+      .status(HttpStatusCode.BAD_REQUEST)
+      .json({ success: false, message: ErrorMessages.PRODUCT_NOT_FOUND });
+  }
   const existingCustomer = await Customer.findById(req.user._id).populate(
     "cartItems.product"
   );
@@ -33,12 +39,6 @@ export const AddToCart = AsyncWrapper(async (req: Request, res: Response) => {
     return res
       .status(HttpStatusCode.BAD_REQUEST)
       .json({ success: false, message: ErrorMessages.USER_NOT_FOUND });
-  }
-
-  if (!existingProduct) {
-    return res
-      .status(HttpStatusCode.BAD_REQUEST)
-      .json({ success: false, message: ErrorMessages.PRODUCT_NOT_FOUND });
   }
 
   const productData = {
@@ -49,6 +49,7 @@ export const AddToCart = AsyncWrapper(async (req: Request, res: Response) => {
   let cartItems = existingCustomer?.cartItems;
   let isExist = false;
   for (let item of cartItems) {
+    console.log(item);
     if (item.product._id.toString() === productId.toString()) {
       item.quantity++;
       isExist = true;
