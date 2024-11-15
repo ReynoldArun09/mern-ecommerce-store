@@ -31,4 +31,17 @@ const ComponentSubHeading = ({ content, className }: HeadingProps) => {
   );
 };
 
-export { ComponentHeading, ComponentSubHeading };
+const PageHeading = ({ content, className }: HeadingProps) => {
+  return (
+    <h1
+      className={cn(
+        "text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl",
+        className
+      )}
+    >
+      {content}
+    </h1>
+  );
+};
+
+export { ComponentHeading, ComponentSubHeading, PageHeading };

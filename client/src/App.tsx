@@ -6,6 +6,7 @@ import AuthLayout from "./layouts/auth-layout";
 import SignUpPage from "./pages/auth/sign-up-page";
 import SignInPage from "./pages/auth/sign-in-page";
 import LoadingSpinner from "./components/common/loading-spinner";
+import CartPage from "./pages/shop/cart-page";
 
 export default function App() {
   const { data: isAuthenticated, isLoading } = useVerifyAuthApi();
@@ -17,6 +18,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<ShopLayout />}>
         <Route index element={<HomePage />} />
+        <Route path="cart" element={<CartPage />} />
       </Route>
       <Route
         path="/auth"
