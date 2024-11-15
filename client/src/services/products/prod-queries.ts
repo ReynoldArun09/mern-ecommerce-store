@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   GetFeaturedProductsApi,
   GetPopularCategoryAndCountApi,
+  GetRecommendedProductApi,
   GetSingleProductApi,
 } from "./prod-api";
 
@@ -23,5 +24,12 @@ export function useGetSingleProduct(id: string) {
   return useQuery({
     queryKey: ["single-product"],
     queryFn: () => GetSingleProductApi(id),
+  });
+}
+
+export function useGetRecommendedProducts() {
+  return useQuery({
+    queryKey: ["recommended-products"],
+    queryFn: GetRecommendedProductApi,
   });
 }

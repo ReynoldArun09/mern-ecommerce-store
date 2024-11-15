@@ -46,3 +46,17 @@ export const GetSingleProductApi = async (
     throw error;
   }
 };
+
+export const GetRecommendedProductApi = async (): Promise<
+  ProductResponse[]
+> => {
+  try {
+    const response = await axiosInstance.get(`/product/recommendation`);
+    return response.data.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.response?.data.message);
+    }
+    throw error;
+  }
+};
