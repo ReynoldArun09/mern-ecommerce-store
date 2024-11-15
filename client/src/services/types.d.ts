@@ -20,3 +20,12 @@ export type CartResponse = {
   product: ProductType;
   quantity: number;
 };
+
+export type ProductResponse = ProductType;
+
+export type ProductcountResponse = {
+  productCount: number;
+  category: string;
+};
+
+export type FeaturedResponse = ProductResponse;

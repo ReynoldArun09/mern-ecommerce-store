@@ -29,14 +29,16 @@ export default function CartSheet() {
     <Sheet>
       <SheetTrigger asChild>
         <Button variant={"outline"} size={"icon"} className="relative">
-          {count && count > 0 && (
-            <Badge
-              variant="secondary"
-              className="absolute justify-center p-2 rounded-full size-6"
-            >
-              {count}
-            </Badge>
-          )}
+          {count
+            ? count > 0 && (
+                <Badge
+                  variant="secondary"
+                  className="absolute -right-2 -top-2 size-6 justify-center rounded-full p-2.5"
+                >
+                  {count}
+                </Badge>
+              )
+            : ""}
           <ShoppingCartIcon />
         </Button>
       </SheetTrigger>
