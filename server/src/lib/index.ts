@@ -1,5 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
 import { ParsedEnvVariables } from "../config";
+import Stripe from "stripe";
 
 cloudinary.config({
   cloud_name: ParsedEnvVariables.CLOUDINARY_CLOUD_NAME,
@@ -7,4 +8,6 @@ cloudinary.config({
   api_secret: ParsedEnvVariables.CLOUDINARY_API_SECRET,
 });
 
-export default cloudinary;
+const stripe = new Stripe(ParsedEnvVariables.STRIPE_SECRET_KEY);
+
+export { cloudinary, stripe };

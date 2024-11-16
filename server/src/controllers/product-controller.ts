@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
 import { AppError, AsyncWrapper } from "../utils";
 import { ErrorMessages, HttpStatusCode, SuccessMessages } from "../constants";
-import cloudinary from "../lib";
+
 import { Product } from "../models";
 import slugify from "slugify";
+import { cloudinary } from "../lib";
 
 export const GetAllProducts = AsyncWrapper(
   async (req: Request, res: Response) => {

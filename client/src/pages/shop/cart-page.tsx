@@ -9,6 +9,9 @@ import {
 import { useGetCartProductsApi } from "@/services/cart/cart-queries";
 import { Separator } from "@radix-ui/react-separator";
 import { ShoppingCartIcon } from "lucide-react";
+import { loadStripe } from "@stripe/stripe-js";
+import { axiosInstance } from "@/services/axios";
+import { toast } from "sonner";
 
 export default function CartPage() {
   const { data: cartItems } = useGetCartProductsApi();
@@ -27,6 +30,8 @@ export default function CartPage() {
     update({ productId, quantity: currentQuantity + 1 });
   };
 
+  const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
+
   const handleUpdatDecrement = (productId: string, currentQuantity: number) => {
     update({ productId, quantity: currentQuantity - 1 });
   };
@@ -35,6 +40,24 @@ export default function CartPage() {
     (total, item) => total + item.quantity * item.product.price,
     0
   );
+
+  const handlePayment = async () => {
+    const stripe = await stripePromise;
+    const response = await axiosInstance.post(
+      "/payments/create-checkout-session",
+      {
+        products: cartItems,
+      }
+    );
+    const session = response.data;
+    const result = await stripe?.redirectToCheckout({
+      sessionId: session.id,
+    });
+
+    if (result?.error) {
+      toast.error("something went wrong");
+    }
+  };
 
   return (
     <section className="max-h-screen py-8 mb-10">
@@ -116,7 +139,9 @@ export default function CartPage() {
                     <span>Total</span>
                     <span>$ {totalAmount?.toFixed(2)}</span>
                   </div>
-                  <Button className="w-full">Proceed to Checkout</Button>
+                  <Button className="w-full" onClick={handlePayment}>
+                    Proceed to Checkout
+                  </Button>
                 </div>
               </CardContent>
             </Card>
