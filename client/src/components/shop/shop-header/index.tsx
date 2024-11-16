@@ -1,6 +1,6 @@
-import DesktopLeftMenu from "./desktop-left-menu";
-import DesktopRightMenu from "./desktop-right-menu";
-import MobileLeftMenu from "./mobile-left-menu";
+import DesktopLeftMenu from "./desktop/desktop-left-menu";
+import DesktopRightMenu from "./desktop/desktop-right-menu";
+import MobileLeftMenu from "./mobile/mobile-left-menu";
 
 export default function ShopHeader() {
   return (

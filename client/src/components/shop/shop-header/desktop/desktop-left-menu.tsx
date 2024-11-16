@@ -1,5 +1,5 @@
 import SiteLogo from "@/components/common/site-logo";
-import NavLinks from "./nav-links";
+import NavLinks from "../nav-links";
 
 export default function DesktopLeftMenu() {
   return (

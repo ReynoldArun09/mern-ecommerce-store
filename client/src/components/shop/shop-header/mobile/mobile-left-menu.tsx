@@ -7,8 +7,9 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { AlignJustifyIcon } from "lucide-react";
-import { navLinks } from "./data";
+
 import { Link } from "react-router-dom";
+import { navLinks } from "../../data";
 
 export default function MobileLeftMenu() {
   return (

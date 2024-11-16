@@ -1,67 +1,20 @@
-import { MinusIcon, PlusIcon, XIcon } from "@/components/common/icons";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import {
-  useRemoveFromCartMutation,
-  useUpdateQuantityMutation,
-} from "@/services/cart/cart-mutation";
+import { Card } from "@/components/ui/card";
 import { useGetCartProductsApi } from "@/services/cart/cart-queries";
-import { Separator } from "@radix-ui/react-separator";
-import { ShoppingCartIcon } from "lucide-react";
-import { loadStripe } from "@stripe/stripe-js";
-import { axiosInstance } from "@/services/axios";
-import { toast } from "sonner";
+import EmptyCart from "@/components/common/cart/empty-cart";
+import CartCoupon from "@/components/common/cart/cart-coupon";
+import CartCheckoutDetails from "@/components/common/cart/cart-checkout-details";
+import RemoveFromCart from "@/components/common/cart/remove-from-cart";
+import UpdateCartQuantity from "@/components/common/update-quantity";
+import { PageHeading } from "@/components/common/typography";
 
 export default function CartPage() {
-  const { data: cartItems } = useGetCartProductsApi();
+  const { data: cartItems, error } = useGetCartProductsApi();
 
-  const { mutate } = useRemoveFromCartMutation();
-  const { mutate: update } = useUpdateQuantityMutation();
-
-  const handleRemoveFromCart = (productId: string) => {
-    mutate(productId);
-  };
-
-  const handleUpdateIncrement = (
-    productId: string,
-    currentQuantity: number
-  ) => {
-    update({ productId, quantity: currentQuantity + 1 });
-  };
-
-  const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
-
-  const handleUpdatDecrement = (productId: string, currentQuantity: number) => {
-    update({ productId, quantity: currentQuantity - 1 });
-  };
-
-  const totalAmount = cartItems?.reduce(
-    (total, item) => total + item.quantity * item.product.price,
-    0
-  );
-
-  const handlePayment = async () => {
-    const stripe = await stripePromise;
-    const response = await axiosInstance.post(
-      "/payments/create-checkout-session",
-      {
-        products: cartItems,
-      }
-    );
-    const session = response.data;
-    const result = await stripe?.redirectToCheckout({
-      sessionId: session.id,
-    });
-
-    if (result?.error) {
-      toast.error("something went wrong");
-    }
-  };
+  console.log(error);
 
   return (
-    <section className="max-h-screen py-8 mb-10">
-      <h1 className="text-3xl font-bold">Shopping Cart</h1>
+    <section className="min-h-screen py-8 mb-10">
+      <PageHeading>Shopping Cart</PageHeading>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         <div className="col-span-2 py-5 space-y-5">
           {cartItems?.map((item) => (
@@ -76,94 +29,23 @@ export default function CartPage() {
                   <h3 className="font-semibold">{item.product.name}</h3>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() =>
-                      handleUpdatDecrement(item.product._id, item.quantity)
-                    }
-                  >
-                    <MinusIcon className="w-4 h-4" />
-                  </Button>
-                  <span className="font-medium">{item.quantity}</span>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() =>
-                      handleUpdateIncrement(item.product._id, item.quantity)
-                    }
-                  >
-                    <PlusIcon className="w-4 h-4" />
-                  </Button>
+                  <UpdateCartQuantity
+                    productId={item.product._id}
+                    quantity={item.quantity}
+                  />
                 </div>
                 <div className="font-medium">
                   $ {(item.quantity * item.product.price).toFixed(2)}
                 </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => handleRemoveFromCart(item.product._id)}
-                >
-                  <XIcon className="w-4 h-4" />
-                </Button>
+                <RemoveFromCart productId={item.product._id} />
               </div>
             </Card>
           ))}
-          {cartItems?.length === 0 && (
-            <div className="flex flex-col items-center justify-center h-full">
-              <ShoppingCartIcon className="w-24 h-24 text-muted-foreground" />
-              <div className="text-xl font-bold text-muted-foreground">
-                Your cart is empty
-              </div>
-            </div>
-          )}
+          {cartItems?.length === 0 && <EmptyCart />}
         </div>
         <div className="py-5 space-y-4">
-          <div>
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-2xl font-bold">
-                  Order Summary
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-5">
-                <div>
-                  <div className="flex justify-between">
-                    <span>Shipping</span>
-                    <span className="text-green-500">Free</span>
-                  </div>
-                </div>
-                <Separator />
-                <div className="space-y-5">
-                  <div className="flex justify-between">
-                    <span>Total</span>
-                    <span>$ {totalAmount?.toFixed(2)}</span>
-                  </div>
-                  <Button className="w-full" onClick={handlePayment}>
-                    Proceed to Checkout
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-          <div>
-            <Card>
-              <CardHeader>
-                <CardTitle className="font-bold tracking-wide text-md">
-                  Do you have a voucher or gift card?
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-5">
-                <div className="space-y-5">
-                  <Input />
-                  <Button className="w-full">Apply Code</Button>
-                </div>
-                <div>
-                  <p>You Available Coupon</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          {cartItems && <CartCheckoutDetails />}
+          {cartItems && <CartCoupon />}
         </div>
       </div>
     </section>

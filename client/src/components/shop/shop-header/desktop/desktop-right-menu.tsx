@@ -1,5 +1,5 @@
-import AuthButtons from "./auth-buttons";
-import CartSheet from "./cart-sheet";
+import AuthButtons from "../auth-buttons";
+import CartSheet from "../cart/cart-sheet";
 
 export default function DesktopRightMenu() {
   return (

@@ -1,8 +1,9 @@
-import { footerlinks } from "./data";
+import { ComponentFlexWrapper } from "@/components/common/wrapper";
+import { footerlinks } from "../data";
 
 export default function FooterLinks() {
   return (
-    <div className="flex flex-col items-start justify-between w-full space-y-3 sm:grid sm:grid-cols-2 sm:items-center md:grid-cols-4">
+    <ComponentFlexWrapper className="items-start justify-between w-full space-y-3 text-start sm:grid sm:grid-cols-2 sm:items-center md:grid-cols-4">
       {footerlinks.map((t) => (
         <div key={`${t.title}`}>
           <h3 className="mb-2 font-bold tracking-wider uppercase">{t.title}</h3>
@@ -16,6 +17,6 @@ export default function FooterLinks() {
           ))}
         </div>
       ))}
-    </div>
+    </ComponentFlexWrapper>
   );
 }

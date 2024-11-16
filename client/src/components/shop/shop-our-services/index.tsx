@@ -1,34 +1,16 @@
-import {
-  ComponentHeading,
-  ComponentSubHeading,
-} from "@/components/common/typography";
-import { ComponentWrapper, GridWrapper } from "@/components/common/wrappers";
-import { services } from "./data";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import { PageHeading, PageSubHeading } from "@/components/common/typography";
+import { ComponentWrapper, GridWrapper } from "@/components/common/wrapper";
+import ServicesCard from "./services-card";
+import { services } from "../data";
 
 export default function ShopOurServices() {
   return (
     <ComponentWrapper>
-      <ComponentHeading content="Our Services" />
-      <ComponentSubHeading content="Your satisfaction is our priority." />
+      <PageHeading>Our Services</PageHeading>
+      <PageSubHeading>Your satisfaction is our priority.</PageSubHeading>
       <GridWrapper>
-        {services?.map((service) => (
-          <Card className="cursor-pointer" key={service.title}>
-            <CardHeader>
-              <CardTitle>{service.icon}</CardTitle>
-              <CardTitle className="text-xl font-bold">
-                {service.title}
-              </CardTitle>
-              <CardDescription className="text-sm font-bold">
-                {service.description}
-              </CardDescription>
-            </CardHeader>
-          </Card>
+        {services.map((service) => (
+          <ServicesCard key={service.title} service={service} />
         ))}
       </GridWrapper>
     </ComponentWrapper>

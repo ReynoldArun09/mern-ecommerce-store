@@ -1,5 +1,6 @@
 import SiteLogo from "@/components/common/site-logo";
 import FooterLinks from "./footer-links";
+import { PageDescription } from "@/components/common/typography";
 
 export default function ShopFooter() {
   return (
@@ -8,9 +9,7 @@ export default function ShopFooter() {
         <SiteLogo />
         <FooterLinks />
         <div>
-          <p className="font-bold text-gray-500">
-            &copy; {new Date().getFullYear()} One Stop Store
-          </p>
+          <PageDescription>&copy; 2024 One Stop Store</PageDescription>
         </div>
       </div>
     </footer>

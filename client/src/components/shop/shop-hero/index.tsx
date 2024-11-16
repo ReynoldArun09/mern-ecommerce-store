@@ -1,19 +1,16 @@
-import {
-  ComponentSubHeading,
-  PageHeading,
-} from "@/components/common/typography";
-import ShopHeroButtons from "./shop-hero-button";
+import { PageHeading, PageSubHeading } from "@/components/common/typography";
+import { ComponentFlexWrapper } from "@/components/common/wrapper";
+import ShopNowButton from "./shop-now-button";
 
 export default function ShopHero() {
   return (
-    <section className="flex flex-col space-y-3 items-center justify-center w-full text-center h-[40vh]">
-      <PageHeading content="Your One-Stop Shopping Destination" />
-      <ComponentSubHeading
-        className="mx-auto sm:w-1/2 md:w-2/3"
-        content="Explore a world of fashion, where every click brings you the latest
-          trends and timeless classics to express your unique style."
-      />
-      <ShopHeroButtons />
-    </section>
+    <ComponentFlexWrapper className="h-[40vh] items-center space-y-5">
+      <PageHeading size={"big"}>Your One-Stop Shopping Destination</PageHeading>
+      <PageSubHeading>
+        Explore a world of fashion, where every click brings you the latest
+        trends and timeless classics to express your unique style.
+      </PageSubHeading>
+      <ShopNowButton />
+    </ComponentFlexWrapper>
   );
 }
