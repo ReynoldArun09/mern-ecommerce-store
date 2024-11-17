@@ -35,8 +35,6 @@ export const CreateCheckoutSessionApi = AsyncWrapper(
       };
     });
 
-    console.log(lineItems);
-
     let coupon = null;
     if (couponCode) {
       coupon = await Coupon.findOne({ code: couponCode, userId: req.user._id });

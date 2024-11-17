@@ -1,5 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import {
+  GetAllCategoryProductsApi,
+  GetAllTargetAudienceProductsApi,
   GetFeaturedProductsApi,
   GetPopularCategoryAndCountApi,
   GetRecommendedProductApi,
@@ -31,5 +33,21 @@ export function useGetRecommendedProducts() {
   return useQuery({
     queryKey: ["recommended-products"],
     queryFn: GetRecommendedProductApi,
+  });
+}
+
+export function useGetPaginationCategory(cat: string, page: number) {
+  return useQuery({
+    queryKey: ["category-pagination", cat, page],
+    queryFn: () => GetAllCategoryProductsApi(cat, page),
+    placeholderData: keepPreviousData,
+  });
+}
+
+export function useGetPaginationTarget(type: string, page: number) {
+  return useQuery({
+    queryKey: ["target-pagination", type, page],
+    queryFn: () => GetAllTargetAudienceProductsApi(type, page),
+    placeholderData: keepPreviousData,
   });
 }

@@ -24,7 +24,8 @@ productRoutes.delete(
   AdminMiddleware,
   product.DeleteProduct
 );
-productRoutes.get("/all-category/:category", product.GetProductsByCategory);
+productRoutes.get("/all-category", product.GetProductsByCategory);
+productRoutes.get("/all-target", product.GetProductsByTarget);
 productRoutes.get("/recommendation", product.GetRecommendedProducts);
 productRoutes.patch(
   "/toggle/:id",

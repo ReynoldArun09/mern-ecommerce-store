@@ -1,6 +1,7 @@
 import { AxiosError, axiosInstance } from "../axios";
 import {
   FeaturedResponse,
+  PaginationResponse,
   ProductcountResponse,
   ProductResponse,
 } from "../types";
@@ -53,6 +54,42 @@ export const GetRecommendedProductApi = async (): Promise<
   try {
     const response = await axiosInstance.get(`/product/recommendation`);
     return response.data.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.response?.data.message);
+    }
+    throw error;
+  }
+};
+
+export const GetAllCategoryProductsApi = async (
+  category: string,
+  page = 1,
+  limit = 8
+): Promise<PaginationResponse> => {
+  try {
+    const response = await axiosInstance.get(
+      `/product/all-category?cat=${category}&limit=${limit}&page=${page}`
+    );
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.response?.data.message);
+    }
+    throw error;
+  }
+};
+
+export const GetAllTargetAudienceProductsApi = async (
+  type: string,
+  page = 1,
+  limit = 8
+): Promise<PaginationResponse> => {
+  try {
+    const response = await axiosInstance.get(
+      `/product/all-target?type=${type}&limit=${limit}&page=${page}`
+    );
+    return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {
       throw new Error(error.response?.data.message);

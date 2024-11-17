@@ -29,3 +29,13 @@ export type ProductcountResponse = {
 };
 
 export type FeaturedResponse = ProductResponse;
+
+export type PaginationResponse = {
+  success: boolean;
+  pagination: {
+    totalPages: number;
+    first: number;
+    last: number;
+  };
+  data: ProductResponse[];
+};

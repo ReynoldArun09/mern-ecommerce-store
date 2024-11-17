@@ -111,13 +111,27 @@ export const DeleteProduct = AsyncWrapper(
 
 export const GetProductsByCategory = AsyncWrapper(
   async (req: Request, res: Response) => {
-    const { category } = req.params;
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 8;
+    const cat = req.query.cat;
+    const skip = (page - 1) * limit;
 
-    const products = await Product.find({ category });
+    const products = await Product.find({ category: cat })
+      .skip(skip)
+      .limit(limit);
+    const count = await Product.countDocuments({ category: cat });
+    const totalPages = Math.ceil(count / limit);
+    const lastPage = page === totalPages;
+    const firstPage = page === 1;
 
     res.status(HttpStatusCode.OK).json({
       success: true,
       data: products,
+      pagination: {
+        totalPages,
+        last: lastPage,
+        first: firstPage,
+      },
     });
   }
 );
@@ -176,6 +190,39 @@ export const GetCategoriesAndProductCount = AsyncWrapper(
     res.status(HttpStatusCode.OK).json({
       success: true,
       data: products,
+    });
+  }
+);
+
+export const GetProductsByTarget = AsyncWrapper(
+  async (req: Request, res: Response) => {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 8;
+    const skip = (page - 1) * limit;
+    const type = req.query.type;
+
+    let products;
+    if (type === "all") {
+      products = await Product.find({}).skip(skip).limit(limit);
+    } else {
+      products = await Product.find({ targetAudience: type })
+        .skip(skip)
+        .limit(limit);
+    }
+
+    const count = await Product.countDocuments({ targetAudience: type });
+    const totalPages = Math.ceil(count / limit);
+    const lastPage = page === totalPages;
+    const firstPage = page === 1;
+
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      data: products,
+      pagination: {
+        totalPages,
+        first: firstPage,
+        last: lastPage,
+      },
     });
   }
 );

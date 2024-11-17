@@ -8,11 +8,11 @@ import {
 export const navLinks = [
   {
     name: "Mens",
-    path: "/shop?type=men",
+    path: "/shop?type=Men",
   },
   {
     name: "Womens",
-    path: "/shop?type=womens",
+    path: "/shop?type=Women",
   },
 ];
 

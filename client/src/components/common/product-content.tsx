@@ -33,7 +33,7 @@ export default function ProductContent() {
         <Separator />
         <div className="space-y-3">
           <div className="flex gap-4 w-fit">
-            <AddToCartButton productId={product?._id} />
+            <AddToCartButton productId={product?._id} product={product} />
             <Button variant={"outline"}>Buy now</Button>
           </div>
         </div>

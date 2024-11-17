@@ -9,23 +9,52 @@ import {
   SheetTitle,
   SheetFooter,
 } from "@/components/ui/sheet";
-
 import { useGetCartProductsApi } from "@/services/cart/cart-queries";
 import { ShoppingCartIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import CartLineItems from "./cartline-items";
 import EmptyCart from "@/components/common/cart/empty-cart";
+import { useVerifyAuthApi } from "@/services/auth/auth-queries";
+import { ProductResponse } from "@/services/types";
+import { toast } from "sonner";
+
+interface CartItemProps {
+  product: ProductResponse;
+  quantity: number;
+  productId: string;
+}
 
 export default function CartSheet() {
   const navigate = useNavigate();
+  const { data: cartItemsfromDB } = useGetCartProductsApi();
+  const { data: isAuth } = useVerifyAuthApi();
+  let cartItems;
 
-  const { data: cartItems } = useGetCartProductsApi();
+  if (isAuth) {
+    cartItems = cartItemsfromDB;
+  } else {
+    const getCartItem = JSON.parse(localStorage.getItem("cart") || "[]");
+    cartItems = getCartItem;
+  }
 
   const totalAmount = cartItems?.reduce(
-    (total, item) => total + item.quantity * item.product.price,
+    (total: number, item: CartItemProps) =>
+      total + item.quantity * item.product.price,
     0
   );
-  const count = cartItems?.reduce((total, item) => total + item.quantity, 0);
+  const count = cartItems?.reduce(
+    (total: number, item: CartItemProps) => total + item.quantity,
+    0
+  );
+
+  const handleCartCheckout = () => {
+    if (isAuth) {
+      navigate("/cart");
+    } else {
+      toast.info("Please Sign in to continue with checkout");
+      navigate("/auth/sign-in");
+    }
+  };
 
   return (
     <Sheet>
@@ -63,7 +92,7 @@ export default function CartSheet() {
               </div>
               <SheetFooter>
                 <SheetTrigger asChild>
-                  <Button className="w-full" onClick={() => navigate("/cart")}>
+                  <Button className="w-full" onClick={handleCartCheckout}>
                     Continue to checkout
                   </Button>
                 </SheetTrigger>

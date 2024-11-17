@@ -37,7 +37,7 @@ export default function Product({ product, viewable = false }: ProductProps) {
         </PageDescription>
       </CardContent>
       <CardFooter className="gap-2 py-4 pt-0">
-        <AddToCartButton productId={product._id} />
+        <AddToCartButton productId={product._id} product={product} />
         {viewable && <ProductDetails product={product} />}
       </CardFooter>
     </Card>

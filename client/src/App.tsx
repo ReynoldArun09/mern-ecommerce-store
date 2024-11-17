@@ -10,6 +10,8 @@ import CategoryPage from "./pages/shop/category-page";
 import ProductPage from "./pages/shop/product-page";
 import { useVerifyAuthApi } from "./services/auth/auth-queries";
 import LoadingSpinner from "./components/common/loading-spinner";
+import PurchaseSuccessPage from "./pages/shop/purchase-success-page";
+import PurchaseCancelPage from "./pages/shop/purchase-cancel-page";
 
 export default function App() {
   const { data: isAuthenticated, isLoading } = useVerifyAuthApi();
@@ -34,6 +36,26 @@ export default function App() {
         <Route path="sign-up" element={<SignUpPage />} />
         <Route path="sign-in" element={<SignInPage />} />
       </Route>
+      <Route
+        path="/purchase-success"
+        element={
+          isAuthenticated ? (
+            <PurchaseSuccessPage />
+          ) : (
+            <Navigate to="/auth/sign-in" />
+          )
+        }
+      />
+      <Route
+        path="/purchase-cancel"
+        element={
+          isAuthenticated ? (
+            <PurchaseCancelPage />
+          ) : (
+            <Navigate to="/auth/sign-in" />
+          )
+        }
+      />
     </Routes>
   );
 }

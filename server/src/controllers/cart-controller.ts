@@ -113,7 +113,7 @@ export const UpdateQuantityApi = AsyncWrapper(
     }
 
     const existingItem = existingCustomer.cartItems.find(
-      (item: ICartItems) => item.product._id.toString() === productId
+      (item: ICartItems) => item.product._id.toString() === productId.toString()
     );
 
     if (existingItem) {
