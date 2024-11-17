@@ -28,6 +28,7 @@ export default function CartSheet() {
   const navigate = useNavigate();
   const { data: cartItemsfromDB } = useGetCartProductsApi();
   const { data: isAuth } = useVerifyAuthApi();
+
   let cartItems;
 
   if (isAuth) {

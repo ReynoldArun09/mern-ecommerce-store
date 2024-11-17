@@ -1,11 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { XIcon } from "../icons";
 import { useRemoveFromCartMutation } from "@/services/cart/cart-mutation";
+import { useVerifyAuthApi } from "@/services/auth/auth-queries";
+import useCart from "@/hooks/useCart";
 
 export default function RemoveFromCart({ productId }: { productId: string }) {
   const { mutate } = useRemoveFromCartMutation();
+  const { data: isAuth } = useVerifyAuthApi();
+  const { removeFromLocalStorage } = useCart();
   const handleRemoveFromCart = (productId: string) => {
-    mutate(productId);
+    if (!isAuth) {
+      removeFromLocalStorage(productId);
+    } else {
+      mutate(productId);
+    }
   };
   return (
     <Button

@@ -9,12 +9,6 @@ interface CartItem {
 
 export default function useCart() {
   const [cart, setCart] = useLocalStorage<CartItem[]>("cart", []);
-
-  const syncCartWithLocalStorage = (cartData: CartItem[]) => {
-    setCart(cartData);
-    localStorage.setItem("cart", JSON.stringify(cartData));
-  };
-
   const addToLocalStorage = (product: ProductResponse) => {
     const currentCart = [...cart];
 
@@ -31,14 +25,14 @@ export default function useCart() {
         quantity: 1,
       });
     }
-    syncCartWithLocalStorage(currentCart);
+    setCart(currentCart);
   };
   const removeFromLocalStorage = (productId: string) => {
     const updateCart = cart.filter((item) => item.productId !== productId);
     setCart(updateCart);
   };
   const updateInLocalStorage = (productId: string, quantity: number) => {
-    const updateCart = cart.filter((item) =>
+    const updateCart = cart.map((item) =>
       item.productId === productId ? { ...item, quantity } : item
     );
     setCart(updateCart);

@@ -1,6 +1,8 @@
 import { useUpdateQuantityMutation } from "@/services/cart/cart-mutation";
 import { Button } from "../ui/button";
 import { MinusIcon, PlusIcon } from "./icons";
+import { useVerifyAuthApi } from "@/services/auth/auth-queries";
+import useCart from "@/hooks/useCart";
 
 interface UpdateCartButtonsProps {
   productId: string;
@@ -12,13 +14,22 @@ export default function UpdateCartQuantity({
   quantity,
 }: UpdateCartButtonsProps) {
   const { mutate: update } = useUpdateQuantityMutation();
-
+  const { data: isAuth } = useVerifyAuthApi();
+  const { updateInLocalStorage } = useCart();
   const handleUpdateIncrement = (Id: string, currentQuantity: number) => {
-    update({ productId: Id, quantity: currentQuantity + 1 });
+    if (!isAuth) {
+      updateInLocalStorage(productId, currentQuantity + 1);
+    } else {
+      update({ productId: Id, quantity: currentQuantity + 1 });
+    }
   };
 
   const handleUpdatDecrement = (Id: string, currentQuantity: number) => {
-    update({ productId: Id, quantity: currentQuantity - 1 });
+    if (!isAuth) {
+      updateInLocalStorage(productId, currentQuantity - 1);
+    } else {
+      update({ productId: Id, quantity: currentQuantity - 1 });
+    }
   };
   return (
     <div className="flex items-center gap-2">
