@@ -1,8 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useGetCouponApi } from "@/services/coupon/coupon.queries";
 
 export default function CartCoupon() {
+  const { data: coupon } = useGetCouponApi();
+
+  console.log(coupon);
+
   return (
     <div>
       <Card>
@@ -13,11 +18,20 @@ export default function CartCoupon() {
         </CardHeader>
         <CardContent className="space-y-5">
           <div className="space-y-5">
-            <Input />
+            <Input value={coupon?.code} readOnly />
             <Button className="w-full">Apply Code</Button>
           </div>
           <div>
-            <p>You Available Coupon</p>
+            {coupon ? (
+              <>
+                <p>Your Available Coupon:</p>
+                <p>{coupon?.code} - 10% off</p>
+              </>
+            ) : (
+              <>
+                <p>No Coupon Available</p>
+              </>
+            )}
           </div>
         </CardContent>
       </Card>

@@ -19,7 +19,6 @@ export const CreateCheckoutSessionApi = AsyncWrapper(
     let totalAmount = 0;
 
     const lineItems = products.map((product) => {
-      console.log(product.product.name);
       const amount = Math.round(product.product.price * 100);
       totalAmount += amount * product.quantity;
 
@@ -91,13 +90,16 @@ async function createStripeCoupon(discountPercentage: any) {
   return coupon.id;
 }
 
-async function createNewCoupon(userId: string) {
+async function createNewCoupon(customerId: string) {
+  await Coupon.findOneAndDelete({ customerId });
+
   const newCoupon = new Coupon({
     code: "GIFT" + Math.random().toString(36).substring(2, 8).toUpperCase(),
     discountPercentage: 10,
     expirationDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-    userId: userId,
+    customerId,
   });
+  await newCoupon.save();
   return newCoupon;
 }
 

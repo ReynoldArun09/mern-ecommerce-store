@@ -2,7 +2,7 @@ import { useUpdateQuantityMutation } from "@/services/cart/cart-mutation";
 import { Button } from "../ui/button";
 import { MinusIcon, PlusIcon } from "./icons";
 import { useVerifyAuthApi } from "@/services/auth/auth-queries";
-import useCart from "@/hooks/useCart";
+import { useCart } from "@/hooks/useCart";
 
 interface UpdateCartButtonsProps {
   productId: string;
@@ -15,7 +15,7 @@ export default function UpdateCartQuantity({
 }: UpdateCartButtonsProps) {
   const { mutate: update } = useUpdateQuantityMutation();
   const { data: isAuth } = useVerifyAuthApi();
-  const { updateInLocalStorage } = useCart();
+  const { updateInLocalStorage, removeFromLocalStorage } = useCart();
   const handleUpdateIncrement = (Id: string, currentQuantity: number) => {
     if (!isAuth) {
       updateInLocalStorage(productId, currentQuantity + 1);
@@ -26,7 +26,11 @@ export default function UpdateCartQuantity({
 
   const handleUpdatDecrement = (Id: string, currentQuantity: number) => {
     if (!isAuth) {
-      updateInLocalStorage(productId, currentQuantity - 1);
+      if (currentQuantity === 1) {
+        removeFromLocalStorage(Id);
+      } else {
+        updateInLocalStorage(productId, currentQuantity - 1);
+      }
     } else {
       update({ productId: Id, quantity: currentQuantity - 1 });
     }

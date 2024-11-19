@@ -1,4 +1,5 @@
 import { Toaster } from "@/components/ui/sonner";
+import CartProvider from "@/context/cart-provider";
 import { ThemeProvider } from "@/context/theme-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -19,13 +20,15 @@ export default function Provider({ children }: { children: React.ReactNode }) {
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <ThemeProvider>
-            {import.meta.env.VITE_APP_ENV === "development" && (
-              <ReactQueryDevtools />
-            )}
-            {children}
-          </ThemeProvider>
-          <Toaster closeButton richColors />
+          <CartProvider>
+            <ThemeProvider>
+              {import.meta.env.VITE_APP_ENV === "development" && (
+                <ReactQueryDevtools />
+              )}
+              {children}
+            </ThemeProvider>
+            <Toaster closeButton richColors />
+          </CartProvider>
         </BrowserRouter>
       </QueryClientProvider>
     </HelmetProvider>

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { XIcon } from "../icons";
 import { useRemoveFromCartMutation } from "@/services/cart/cart-mutation";
 import { useVerifyAuthApi } from "@/services/auth/auth-queries";
-import useCart from "@/hooks/useCart";
+import { useCart } from "@/hooks/useCart";
 
 export default function RemoveFromCart({ productId }: { productId: string }) {
   const { mutate } = useRemoveFromCartMutation();

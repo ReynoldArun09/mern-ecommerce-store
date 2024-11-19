@@ -6,10 +6,11 @@ import { Separator } from "@radix-ui/react-separator";
 import { loadStripe } from "@stripe/stripe-js";
 import { toast } from "sonner";
 import { PageHeading } from "../typography";
+import { useGetCouponApi } from "@/services/coupon/coupon.queries";
 
 export default function CartCheckoutDetails() {
   const { data: cartItems } = useGetCartProductsApi();
-
+  const { data: coupon } = useGetCouponApi();
   const totalAmount = cartItems?.reduce(
     (total, item) => total + item.quantity * item.product.price,
     0
@@ -21,6 +22,7 @@ export default function CartCheckoutDetails() {
       "/payments/create-checkout-session",
       {
         products: cartItems,
+        couponCode: coupon ? coupon.code : null,
       }
     );
     const session = response.data;

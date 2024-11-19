@@ -2,8 +2,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   AddToCartProductApi,
   RemoveFromCartApi,
+  SyncCartWithLocalStorageApi,
   UpdateQuantityApi,
 } from "./cart-api";
+import { toast } from "sonner";
 
 export function useAddToCartMutation() {
   const queryClient = useQueryClient();
@@ -39,6 +41,18 @@ export function useUpdateQuantityMutation() {
       quantity: number;
     }) => UpdateQuantityApi(productId, quantity),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart-products"] });
+    },
+  });
+}
+
+export function useSyncCartWithLocalStorageMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: ["sync-cart"],
+    mutationFn: SyncCartWithLocalStorageApi,
+    onSuccess: () => {
+      toast.success("Cart synced successfully!");
       queryClient.invalidateQueries({ queryKey: ["cart-products"] });
     },
   });

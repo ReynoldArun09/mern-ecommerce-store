@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { AsyncWrapper } from "../utils";
 import { Customer, Product } from "../models";
 import { ErrorMessages, HttpStatusCode } from "../constants";
-import { ICartItems } from "../types";
+import { CartItem, ICartItems } from "../types";
 
 export const GetCartProduct = AsyncWrapper(
   async (req: Request, res: Response) => {
@@ -136,5 +136,61 @@ export const UpdateQuantityApi = AsyncWrapper(
         message: ErrorMessages.ITEM_NOT_FOUND_IN_CART,
       });
     }
+  }
+);
+
+export const SyncCartWithLocalStorage = AsyncWrapper(
+  async (req: Request, res: Response) => {
+    const cartData = req.body.cartData;
+    const existingCustomer = await Customer.findById(req.user._id).populate(
+      "cartItems.product"
+    );
+    if (!existingCustomer) {
+      return res
+        .status(HttpStatusCode.BAD_REQUEST)
+        .json({ success: false, message: ErrorMessages.USER_NOT_FOUND });
+    }
+    const cartItems = existingCustomer.cartItems;
+
+    const getKeys = new Set(
+      cartData?.map((item: CartItem) => item.product._id.toString())
+    );
+
+    const filterItems = cartItems.filter((item) =>
+      getKeys.has(item.product._id.toString())
+    );
+
+    const newItems = cartData.filter(
+      (item: CartItem) =>
+        !cartItems.some(
+          (dbItem) =>
+            dbItem.product._id.toString() === item.product._id.toString()
+        )
+    );
+
+    const removedItems = cartItems.filter(
+      (item) => !getKeys.has(item.product._id.toString())
+    );
+
+    if (newItems.length > 0) {
+      existingCustomer.cartItems.push(...newItems);
+    }
+
+    if (removedItems.length > 0) {
+      existingCustomer.cartItems = existingCustomer.cartItems.filter(
+        (item) =>
+          !removedItems.some(
+            (removeItem) =>
+              removeItem.product._id.toString() === item.product._id.toString()
+          )
+      );
+    }
+
+    await existingCustomer.save();
+
+    return res.status(HttpStatusCode.OK).json({
+      success: true,
+      message: "Cart synchronized successfully!",
+    });
   }
 );

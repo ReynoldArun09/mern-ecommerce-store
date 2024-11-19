@@ -5,6 +5,10 @@ export interface ICartItems {
   product: ObjectId;
 }
 
+export interface CartItem extends ICartItems {
+  _id: string;
+}
+
 export interface ICustomer extends Document {
   name: string;
   email: string;

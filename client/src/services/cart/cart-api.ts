@@ -55,3 +55,17 @@ export const UpdateQuantityApi = async (
     throw error;
   }
 };
+
+export const SyncCartWithLocalStorageApi = async (cartData: any) => {
+  try {
+    const response = await axiosInstance.post(`/cart/sync-cart`, {
+      cartData,
+    });
+    return response.data.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.response?.data.message);
+    }
+    throw error;
+  }
+};

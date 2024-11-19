@@ -12,6 +12,8 @@ import { useVerifyAuthApi } from "./services/auth/auth-queries";
 import LoadingSpinner from "./components/common/loading-spinner";
 import PurchaseSuccessPage from "./pages/shop/purchase-success-page";
 import PurchaseCancelPage from "./pages/shop/purchase-cancel-page";
+import DashboardPage from "./pages/admin/dashboard-page";
+import AdminLayout from "./layouts/admin-layout";
 
 export default function App() {
   const { data: isAuthenticated, isLoading } = useVerifyAuthApi();
@@ -28,6 +30,18 @@ export default function App() {
         <Route path="shop" element={<ShopPage />} />
         <Route path="category" element={<CategoryPage />} />
         <Route path="product/:id" element={<ProductPage />} />
+      </Route>
+      <Route
+        path="/admin"
+        element={
+          isAuthenticated?.data?.role === "admin" ? (
+            <AdminLayout />
+          ) : (
+            <Navigate to="/" />
+          )
+        }
+      >
+        <Route path="dashboard" element={<DashboardPage />} />
       </Route>
       <Route
         path="/auth"

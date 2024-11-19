@@ -4,7 +4,7 @@ import LoadingSpinner from "./loading-spinner";
 import { useVerifyAuthApi } from "@/services/auth/auth-queries";
 import { toast } from "sonner";
 import { ProductResponse } from "@/services/types";
-import useCart from "@/hooks/useCart";
+import { useCart } from "@/hooks/useCart";
 
 interface AddToCartButtonProps {
   productId: string;
