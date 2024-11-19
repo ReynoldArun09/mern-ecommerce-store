@@ -1,5 +1,6 @@
 import { useVerifyAuthApi } from "@/services/auth/auth-queries";
 import { useGetCartProductsApi } from "@/services/cart/cart-queries";
+import { useGetCouponApi } from "@/services/coupon/coupon.queries";
 import { ProductResponse } from "@/services/types";
 import { createContext, useMemo, useState } from "react";
 
@@ -12,6 +13,9 @@ interface CartInitialValueProps {
   updateInLocalStorage: (productId: string, quantity: number) => void;
   clearLocalStorage: () => void;
   LocalStorage: CartItem[] | [];
+  addDiscount: () => void;
+  couponDiscount: number;
+  removeDiscount: () => void;
 }
 
 interface CartItem {
@@ -33,6 +37,9 @@ const initialValue: CartInitialValueProps = {
   updateInLocalStorage: () => null,
   clearLocalStorage: () => null,
   LocalStorage: [],
+  addDiscount: () => null,
+  couponDiscount: 0,
+  removeDiscount: () => null,
 };
 
 export const CartContextProvider =
@@ -43,9 +50,10 @@ export default function CartProvider({ children }: CartProviderProps) {
     const storedCart = localStorage.getItem("cart");
     return storedCart ? JSON.parse(storedCart) : [];
   });
-
+  const [couponDiscount, setCouponDiscount] = useState(0);
   const { data: dbStorage } = useGetCartProductsApi();
   const { data: isAuth } = useVerifyAuthApi();
+  const { data: coupon } = useGetCouponApi();
 
   const cartItems = isAuth ? dbStorage : LocalStorage;
 
@@ -102,6 +110,15 @@ export default function CartProvider({ children }: CartProviderProps) {
     setLocalStorage([]);
   };
 
+  const addDiscount = () => {
+    const result = coupon ? coupon.discountPercentage : 0;
+    setCouponDiscount(result);
+  };
+
+  const removeDiscount = () => {
+    setCouponDiscount(0);
+  };
+
   return (
     <CartContextProvider.Provider
       value={{
@@ -113,6 +130,9 @@ export default function CartProvider({ children }: CartProviderProps) {
         updateInLocalStorage,
         removeFromLocalStorage,
         LocalStorage,
+        addDiscount,
+        couponDiscount,
+        removeDiscount,
       }}
     >
       {children}

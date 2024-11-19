@@ -49,7 +49,6 @@ export const AddToCart = AsyncWrapper(async (req: Request, res: Response) => {
   let cartItems = existingCustomer?.cartItems;
   let isExist = false;
   for (let item of cartItems) {
-    console.log(item);
     if (item.product._id.toString() === productId.toString()) {
       item.quantity++;
       isExist = true;

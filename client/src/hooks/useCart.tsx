@@ -11,6 +11,9 @@ export const useCart = () => {
     updateInLocalStorage,
     removeFromLocalStorage,
     LocalStorage,
+    addDiscount,
+    removeDiscount,
+    couponDiscount,
   } = useContext(CartContextProvider);
   return {
     count,
@@ -21,5 +24,8 @@ export const useCart = () => {
     updateInLocalStorage,
     removeFromLocalStorage,
     LocalStorage,
+    couponDiscount,
+    addDiscount,
+    removeDiscount,
   };
 };

@@ -12,9 +12,11 @@ export const GetCouponApi = async () => {
   }
 };
 
-export const ValidateCouponApi = async () => {
+export const ValidateCouponApi = async (code: string) => {
   try {
-    const response = await axiosInstance.post("/coupon/validate");
+    const response = await axiosInstance.post("/coupon/validate", {
+      code,
+    });
     return response.data.data;
   } catch (error) {
     if (error instanceof AxiosError) {

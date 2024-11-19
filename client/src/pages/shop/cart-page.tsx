@@ -1,16 +1,14 @@
 import { Card } from "@/components/ui/card";
-import { useGetCartProductsApi } from "@/services/cart/cart-queries";
-import EmptyCart from "@/components/common/cart/empty-cart";
 import CartCoupon from "@/components/common/cart/cart-coupon";
 import CartCheckoutDetails from "@/components/common/cart/cart-checkout-details";
 import RemoveFromCart from "@/components/common/cart/remove-from-cart";
 import UpdateCartQuantity from "@/components/common/update-quantity";
 import { PageHeading } from "@/components/common/typography";
+import { useCart } from "@/hooks/useCart";
+import { ShoppingCart } from "lucide-react";
 
 export default function CartPage() {
-  const { data: cartItems, error } = useGetCartProductsApi();
-
-  console.log(error);
+  const { cartItems } = useCart();
 
   return (
     <section className="min-h-screen py-8 mb-10">
@@ -41,12 +39,19 @@ export default function CartPage() {
               </div>
             </Card>
           ))}
-          {cartItems?.length === 0 && <EmptyCart />}
+          {cartItems?.length === 0 && (
+            <div className="flex flex-col items-center space-y-5 justify-center h-[50vh]">
+              <ShoppingCart size={35} />
+              <PageHeading>Your cart is empty</PageHeading>
+            </div>
+          )}
         </div>
-        <div className="py-5 space-y-4">
-          {cartItems && <CartCheckoutDetails />}
-          {cartItems && <CartCoupon />}
-        </div>
+        {cartItems && cartItems?.length > 0 ? (
+          <div className="py-5 space-y-4">
+            <CartCheckoutDetails />
+            <CartCoupon />
+          </div>
+        ) : null}
       </div>
     </section>
   );

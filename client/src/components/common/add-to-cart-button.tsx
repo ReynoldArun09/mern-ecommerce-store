@@ -30,6 +30,7 @@ export default function AddToCartButton({
       }
       mutate(productId);
     }
+    toast.success("Product added to cart");
   };
   return (
     <Button className="w-full" onClick={handleAddToCart}>

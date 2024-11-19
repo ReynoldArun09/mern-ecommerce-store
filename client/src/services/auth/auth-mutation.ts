@@ -27,12 +27,14 @@ export function useSignIn() {
   return useMutation({
     mutationKey: ["signIn"],
     mutationFn: SignInApi,
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({
         queryKey: ["verify-auth"],
       });
       toast.success(data?.message);
-      syncCart(LocalStorage);
+      if (LocalStorage && Object.keys(LocalStorage).length > 0) {
+        syncCart(LocalStorage);
+      }
     },
     onError: (error) => {
       toast.error(error.message);
