@@ -41,7 +41,11 @@ export default function ProductDetails({ product }: { product: ProductType }) {
             </span>
           </div>
           <div>
-            <AddToCartButton productId={product._id} product={product} />
+            <AddToCartButton
+              productId={product._id}
+              product={product}
+              quantity={1}
+            />
           </div>
         </DialogContent>
       </Dialog>
