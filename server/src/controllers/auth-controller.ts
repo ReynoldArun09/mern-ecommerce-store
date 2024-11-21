@@ -1,12 +1,16 @@
 import { Request, Response } from "express";
 import { AppError, AsyncWrapper } from "../utils";
-import { ErrorMessages, HttpStatusCode, SuccessMessages } from "../constants";
+import {
+  ApiErrorMessages,
+  HttpStatusCode,
+  ApiSuccessMessages,
+} from "../constants";
 import { ParsedEnvVariables } from "../config";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Customer } from "../models";
 import { SignInSchemaType, SignUpSchemaType } from "../schemas/auth-schema";
-import { JWTPayloadType } from "../types";
+import { JWTPayloadType } from "../global";
 
 export const SignUpApi = AsyncWrapper(async (req: Request, res: Response) => {
   const { email, password, name } = req.body as SignUpSchemaType;
@@ -14,7 +18,7 @@ export const SignUpApi = AsyncWrapper(async (req: Request, res: Response) => {
   const existingCustomer = await Customer.findOne({ email });
   if (existingCustomer) {
     throw new AppError(
-      ErrorMessages.USER_ALREADY_EXISTS,
+      ApiErrorMessages.USER_ALREADY_EXISTS,
       HttpStatusCode.BAD_REQUEST
     );
   }
@@ -60,7 +64,7 @@ export const SignUpApi = AsyncWrapper(async (req: Request, res: Response) => {
   res.status(HttpStatusCode.CREATED).json({
     success: true,
     data: result,
-    message: SuccessMessages.SIGNUP_SUCCESS,
+    message: ApiSuccessMessages.SIGNUP_SUCCESS,
   });
 });
 
@@ -71,7 +75,7 @@ export const SignInApi = AsyncWrapper(async (req: Request, res: Response) => {
 
   if (!existingCustomer) {
     throw new AppError(
-      ErrorMessages.USER_NOT_FOUND,
+      ApiErrorMessages.USER_NOT_FOUND,
       HttpStatusCode.BAD_REQUEST
     );
   }
@@ -80,7 +84,7 @@ export const SignInApi = AsyncWrapper(async (req: Request, res: Response) => {
 
   if (!isMatch) {
     throw new AppError(
-      ErrorMessages.INVALID_PASSWORD,
+      ApiErrorMessages.INVALID_PASSWORD,
       HttpStatusCode.BAD_REQUEST
     );
   }
@@ -116,7 +120,7 @@ export const SignInApi = AsyncWrapper(async (req: Request, res: Response) => {
   res.status(HttpStatusCode.OK).json({
     success: true,
     data: existingCustomer,
-    message: SuccessMessages.SIGNIN_SUCCESS,
+    message: ApiSuccessMessages.SIGNIN_SUCCESS,
   });
 });
 
@@ -125,7 +129,7 @@ export const SignOutApi = AsyncWrapper(async (req: Request, res: Response) => {
   res.clearCookie("refreshToken");
   res.status(HttpStatusCode.OK).json({
     success: true,
-    message: SuccessMessages.SIGNOUT_SUCCESS,
+    message: ApiSuccessMessages.SIGNOUT_SUCCESS,
   });
 });
 
@@ -134,7 +138,7 @@ export const RefreshTokenApi = AsyncWrapper(
     const refreshToken = req.cookies.refreshToken;
 
     if (!refreshToken) {
-      throw new AppError(ErrorMessages.INVALID_TOKEN, 401);
+      throw new AppError(ApiErrorMessages.INVALID_TOKEN, 401);
     }
 
     const decoded = jwt.verify(
@@ -158,7 +162,7 @@ export const RefreshTokenApi = AsyncWrapper(
 
     res.status(HttpStatusCode.OK).json({
       success: true,
-      message: SuccessMessages.REFRESH_TOKEN_SUCCESS,
+      message: ApiSuccessMessages.REFRESH_TOKEN_SUCCESS,
     });
   }
 );

@@ -1,6 +1,6 @@
 import request from "supertest";
 import app from "../app";
-import { ErrorMessages, SuccessMessages } from "../constants";
+import { ApiErrorMessages, ApiSuccessMessages } from "../constants";
 import { Customer } from "../models/customer-model";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -27,7 +27,7 @@ describe("Auth controller testing", () => {
 
       expect(response.status).toBe(200);
       expect(response.body.success).toBe(true);
-      expect(response.body.message).toBe(SuccessMessages.SIGNIN_SUCCESS);
+      expect(response.body.message).toBe(ApiSuccessMessages.SIGNIN_SUCCESS);
     });
 
     it("should return 400 status if user does not exist", async () => {
@@ -38,7 +38,7 @@ describe("Auth controller testing", () => {
       });
 
       expect(response.status).toBe(400);
-      expect(response.body.message).toBe(ErrorMessages.USER_NOT_FOUND);
+      expect(response.body.message).toBe(ApiErrorMessages.USER_NOT_FOUND);
     });
     it("should return 400 status if password is incorrect", async () => {
       (Customer.findOne as jest.Mock).mockResolvedValueOnce({});
@@ -49,7 +49,7 @@ describe("Auth controller testing", () => {
       });
 
       expect(response.status).toBe(400);
-      expect(response.body.message).toBe(ErrorMessages.INVALID_PASSWORD);
+      expect(response.body.message).toBe(ApiErrorMessages.INVALID_PASSWORD);
     });
   });
 
@@ -78,7 +78,7 @@ describe("Auth controller testing", () => {
 
       expect(response.status).toBe(201);
       expect(response.body.success).toBe(true);
-      expect(response.body.message).toBe(SuccessMessages.SIGNUP_SUCCESS);
+      expect(response.body.message).toBe(ApiSuccessMessages.SIGNUP_SUCCESS);
     });
 
     it("should return 400 if user already exist", async () => {
@@ -90,7 +90,7 @@ describe("Auth controller testing", () => {
       });
 
       expect(response.status).toBe(400);
-      expect(response.body.message).toBe(ErrorMessages.USER_ALREADY_EXISTS);
+      expect(response.body.message).toBe(ApiErrorMessages.USER_ALREADY_EXISTS);
     });
   });
 
@@ -99,7 +99,7 @@ describe("Auth controller testing", () => {
       const response = await request(app).post("/api/v1/auth/signout");
       expect(response.status).toBe(200);
       expect(response.body.success).toBe(true);
-      expect(response.body.message).toBe(SuccessMessages.SIGNOUT_SUCCESS);
+      expect(response.body.message).toBe(ApiSuccessMessages.SIGNOUT_SUCCESS);
       expect(response.header["auth"]).toBeUndefined();
       expect(response.header["authrefresh"]).toBeUndefined();
     });

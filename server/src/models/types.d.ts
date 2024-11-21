@@ -1,14 +1,5 @@
 import { Document } from "mongoose";
 
-export interface ICartItems {
-  quantity: number;
-  product: ObjectId;
-}
-
-export interface CartItem extends ICartItems {
-  _id: string;
-}
-
 export interface ICustomer extends Document {
   name: string;
   email: string;
@@ -29,21 +20,6 @@ export interface IProduct extends Document {
   isActive: boolean;
   targetAudience: string;
   brand: string;
-}
-type JWTPayloadType = {
-  _id: ObjectId;
-  name: string;
-  email: string;
-  role: "customer" | "admin";
-  cartItems: ICartItems[];
-};
-
-declare global {
-  namespace Express {
-    interface Request {
-      user: JWTPayloadType;
-    }
-  }
 }
 
 export interface ICoupon extends Document {

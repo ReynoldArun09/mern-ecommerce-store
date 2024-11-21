@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { ICustomer } from "../types";
+import { ICustomer } from "./types";
 
 const customerSchema = new mongoose.Schema<ICustomer>({
   name: {

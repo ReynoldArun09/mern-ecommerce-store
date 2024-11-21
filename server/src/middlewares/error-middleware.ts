@@ -1,7 +1,7 @@
 import { type ErrorRequestHandler } from "express";
 import { ZodError } from "zod";
 import { AppError, logger } from "../utils";
-import { ErrorMessages } from "../constants";
+import { GlobalErrorMessages } from "../constants";
 
 export const ErrorMiddleware: ErrorRequestHandler = (error, req, res, next) => {
   const statusCode = error.statusCode || 500;
@@ -15,12 +15,14 @@ export const ErrorMiddleware: ErrorRequestHandler = (error, req, res, next) => {
   }
 
   if (error.name === "CastError") {
-    return res.status(statusCode).json({ message: ErrorMessages.INVALID_ID });
+    return res
+      .status(statusCode)
+      .json({ message: GlobalErrorMessages.INVALID_ID });
   }
 
   logger.error(error);
 
   return res
     .status(statusCode)
-    .json({ message: ErrorMessages.INTERNAL_SERVER_ERROR });
+    .json({ message: GlobalErrorMessages.INTERNAL_SERVER_ERROR });
 };

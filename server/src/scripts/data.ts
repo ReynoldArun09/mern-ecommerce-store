@@ -1,3 +1,18 @@
+export const userData = [
+  {
+    name: "admin",
+    email: "admin@example.com",
+    password: "password123456A$",
+    role: "admin",
+  },
+  {
+    name: "user",
+    email: "user@example.com",
+    password: "password123456A$",
+    role: "customer",
+  },
+];
+
 export const productsData = [
   {
     name: "Men's T-shirt",

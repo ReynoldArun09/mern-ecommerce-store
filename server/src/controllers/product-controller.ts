@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
 import { AppError, AsyncWrapper } from "../utils";
-import { ErrorMessages, HttpStatusCode, SuccessMessages } from "../constants";
-
+import {
+  ApiErrorMessages,
+  HttpStatusCode,
+  ApiSuccessMessages,
+} from "../constants";
 import { Product } from "../models";
 import slugify from "slugify";
 import { cloudinary } from "../lib";
@@ -37,7 +40,7 @@ export const GetFeaturedProducts = AsyncWrapper(
 
     if (!featuredProducts) {
       throw new AppError(
-        ErrorMessages.NO_FEATURED_PRODUCTS_FOUND,
+        ApiErrorMessages.NO_FEATURED_PRODUCTS_FOUND,
         HttpStatusCode.BAD_REQUEST
       );
     }
@@ -91,7 +94,7 @@ export const DeleteProduct = AsyncWrapper(
 
     if (!existingProduct) {
       throw new AppError(
-        ErrorMessages.PRODUCT_NOT_FOUND,
+        ApiErrorMessages.PRODUCT_NOT_FOUND,
         HttpStatusCode.BAD_REQUEST
       );
     }
@@ -104,7 +107,7 @@ export const DeleteProduct = AsyncWrapper(
 
     res.status(HttpStatusCode.OK).json({
       success: true,
-      message: SuccessMessages.PRODUCT_DELETED_SUCCESS,
+      message: ApiSuccessMessages.PRODUCT_DELETED_SUCCESS,
     });
   }
 );

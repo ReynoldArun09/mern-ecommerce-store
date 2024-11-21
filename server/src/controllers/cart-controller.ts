@@ -1,8 +1,12 @@
 import { Request, Response } from "express";
 import { AsyncWrapper } from "../utils";
 import { Customer, Product } from "../models";
-import { ErrorMessages, HttpStatusCode } from "../constants";
-import { CartItem, ICartItems } from "../types";
+import {
+  ApiErrorMessages,
+  ApiSuccessMessages,
+  HttpStatusCode,
+} from "../constants";
+import { ICartItems } from "../global";
 
 export const GetCartProduct = AsyncWrapper(
   async (req: Request, res: Response) => {
@@ -13,7 +17,7 @@ export const GetCartProduct = AsyncWrapper(
     if (!existingCustomer) {
       return res
         .status(HttpStatusCode.BAD_REQUEST)
-        .json({ success: false, message: ErrorMessages.USER_NOT_FOUND });
+        .json({ success: false, message: ApiErrorMessages.USER_NOT_FOUND });
     }
 
     res.status(HttpStatusCode.OK).json({
@@ -30,7 +34,7 @@ export const AddToCart = AsyncWrapper(async (req: Request, res: Response) => {
   if (!existingProduct) {
     return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ success: false, message: ErrorMessages.PRODUCT_NOT_FOUND });
+      .json({ success: false, message: ApiErrorMessages.PRODUCT_NOT_FOUND });
   }
   const existingCustomer = await Customer.findById(req.user._id).populate(
     "cartItems.product"
@@ -38,7 +42,7 @@ export const AddToCart = AsyncWrapper(async (req: Request, res: Response) => {
   if (!existingCustomer) {
     return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ success: false, message: ErrorMessages.USER_NOT_FOUND });
+      .json({ success: false, message: ApiErrorMessages.USER_NOT_FOUND });
   }
 
   const productData = {
@@ -78,7 +82,7 @@ export const RemoveAllCartItems = AsyncWrapper(
     if (!existingCustomer) {
       return res
         .status(HttpStatusCode.BAD_REQUEST)
-        .json({ success: false, message: ErrorMessages.USER_NOT_FOUND });
+        .json({ success: false, message: ApiErrorMessages.USER_NOT_FOUND });
     }
 
     if (!productId) {
@@ -108,7 +112,7 @@ export const UpdateQuantityApi = AsyncWrapper(
     if (!existingCustomer) {
       return res
         .status(HttpStatusCode.BAD_REQUEST)
-        .json({ success: false, message: ErrorMessages.USER_NOT_FOUND });
+        .json({ success: false, message: ApiErrorMessages.USER_NOT_FOUND });
     }
 
     const existingItem = existingCustomer.cartItems.find(
@@ -132,7 +136,7 @@ export const UpdateQuantityApi = AsyncWrapper(
     } else {
       return res.status(HttpStatusCode.BAD_REQUEST).json({
         success: false,
-        message: ErrorMessages.ITEM_NOT_FOUND_IN_CART,
+        message: ApiErrorMessages.ITEM_NOT_FOUND_IN_CART,
       });
     }
   }
@@ -147,12 +151,12 @@ export const SyncCartWithLocalStorage = AsyncWrapper(
     if (!existingCustomer) {
       return res
         .status(HttpStatusCode.BAD_REQUEST)
-        .json({ success: false, message: ErrorMessages.USER_NOT_FOUND });
+        .json({ success: false, message: ApiErrorMessages.USER_NOT_FOUND });
     }
     const cartItems = existingCustomer.cartItems;
 
     const getKeys = new Set(
-      cartData?.map((item: CartItem) => item.product._id.toString())
+      cartData?.map((item: ICartItems) => item.product._id.toString())
     );
 
     const filterItems = cartItems.filter((item) =>
@@ -160,7 +164,7 @@ export const SyncCartWithLocalStorage = AsyncWrapper(
     );
 
     const newItems = cartData.filter(
-      (item: CartItem) =>
+      (item: ICartItems) =>
         !cartItems.some(
           (dbItem) =>
             dbItem.product._id.toString() === item.product._id.toString()
@@ -189,7 +193,7 @@ export const SyncCartWithLocalStorage = AsyncWrapper(
 
     return res.status(HttpStatusCode.OK).json({
       success: true,
-      message: "Cart synchronized successfully!",
+      message: ApiSuccessMessages.CART_SYNC_SUCCESS,
     });
   }
 );

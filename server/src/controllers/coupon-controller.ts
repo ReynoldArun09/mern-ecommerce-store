@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { AsyncWrapper } from "../utils";
-import { Coupon } from "../models/coupon-model";
-import { ErrorMessages, HttpStatusCode } from "../constants";
+
+import { ApiErrorMessages, HttpStatusCode } from "../constants";
+import { Coupon } from "../models";
 
 export const GetCouponApi = AsyncWrapper(
   async (req: Request, res: Response) => {
@@ -29,7 +30,7 @@ export const ValidateCouponApi = AsyncWrapper(
     if (!existingCoupon) {
       return res.status(HttpStatusCode.BAD_REQUEST).json({
         success: false,
-        message: ErrorMessages.COUPON_NOT_FOUND,
+        message: ApiErrorMessages.COUPON_NOT_FOUND,
       });
     }
 
@@ -40,7 +41,7 @@ export const ValidateCouponApi = AsyncWrapper(
       (existingCoupon.isActive = false), await existingCoupon.save();
       return res.status(HttpStatusCode.BAD_REQUEST).json({
         success: false,
-        message: ErrorMessages.COUPON_EXPIRED,
+        message: ApiErrorMessages.COUPON_EXPIRED,
       });
     }
 

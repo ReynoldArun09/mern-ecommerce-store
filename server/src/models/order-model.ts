@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { IOrder } from "../types";
+import { IOrder } from "./types";
 
 export const orderSchema = new mongoose.Schema<IOrder>({
   customer: {

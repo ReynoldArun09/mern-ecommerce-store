@@ -1,18 +1,24 @@
 import app from "./app";
 import { ParsedEnvVariables } from "./config";
-import MongoConnection from "./database/mongo-connection";
+import { GlobalErrorMessages, GlobalSuccessMessages } from "./constants";
+import InitializeMongoConnection from "./database/initialize-mongo-connection";
 import { logger } from "./utils";
 
 const PORT = ParsedEnvVariables.PORT;
+const ENV = ParsedEnvVariables.NODE_ENV;
 
 async function startServer() {
   try {
-    MongoConnection();
+    await InitializeMongoConnection();
     app.listen(PORT, () => {
-      logger.info(`Server listening on port ${PORT}`);
+      ENV === "development"
+        ? logger.info(GlobalSuccessMessages.DEV_SERVER_STARTED)
+        : logger.info(GlobalSuccessMessages.SERVER_STARTED);
     });
   } catch (error) {
-    logger.error("Failed to start server", error);
+    ENV === "development"
+      ? logger.error(GlobalErrorMessages.DEV_SERVER_FAILED_TO_START, error)
+      : logger.error(GlobalErrorMessages.SERVER_FAILED_TO_START, error);
     process.exit(1);
   }
 }

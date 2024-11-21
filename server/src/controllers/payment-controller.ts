@@ -1,7 +1,12 @@
 import { ParsedEnvVariables } from "../config";
+import {
+  ApiErrorMessages,
+  ApiSuccessMessages,
+  HttpStatusCode,
+} from "../constants";
 import { stripe } from "../lib";
-import { Coupon } from "../models/coupon-model";
-import { Order } from "../models/order-model";
+import { Coupon, Order } from "../models";
+
 import { AsyncWrapper } from "../utils";
 import { Request, Response } from "express";
 
@@ -12,7 +17,7 @@ export const CreateCheckoutSessionApi = AsyncWrapper(
     if (!Array.isArray(products) || products.length === 0) {
       return res.status(400).json({
         success: false,
-        message: "Invalid or empty products array",
+        message: ApiErrorMessages.INVALID_EMPTY_PRODUCTS,
       });
     }
 
@@ -133,9 +138,9 @@ export const CheckoutSuccessApi = AsyncWrapper(
       });
 
       await newOrders.save();
-      res.status(200).json({
+      res.status(HttpStatusCode.OK).json({
         succesS: true,
-        message: "payment successful",
+        message: ApiSuccessMessages.PURCHASE_SUCCESS,
         orderId: newOrders._id,
       });
     }

@@ -3,7 +3,7 @@ import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { ParsedEnvVariables } from "./config";
-import { ErrorMiddleware } from "./middlewares";
+import { ErrorMiddleware, RouteNotFound } from "./middlewares";
 import {
   authRoutes,
   cartRoutes,
@@ -24,6 +24,7 @@ app.use(
 );
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
+app.disable("x-powered-by");
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/product", productRoutes);
@@ -31,6 +32,7 @@ app.use("/api/v1/cart", cartRoutes);
 app.use("/api/v1/coupon", couponRouter);
 app.use("/api/v1/payments", paymentRoutes);
 
+app.use(RouteNotFound);
 app.use(ErrorMiddleware);
 
 export default app;

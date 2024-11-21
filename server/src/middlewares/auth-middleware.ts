@@ -1,8 +1,12 @@
 import { RequestHandler } from "express";
 import { ParsedEnvVariables } from "../config";
-import { ErrorMessages, HttpStatusCode } from "../constants";
+import {
+  ApiErrorMessages,
+  GlobalErrorMessages,
+  HttpStatusCode,
+} from "../constants";
 import { Customer } from "../models";
-import { JWTPayloadType } from "../types";
+import { JWTPayloadType } from "../global";
 import { AppError } from "../utils";
 import jwt from "jsonwebtoken";
 
@@ -12,7 +16,7 @@ export const AuthMiddleware: RequestHandler = async (req, res, next) => {
   if (!accessToken) {
     return res
       .status(HttpStatusCode.UNAUTHORIZED)
-      .json({ message: ErrorMessages.UNAUTHORIZED });
+      .json({ message: GlobalErrorMessages.UNAUTHORIZED });
   }
 
   try {
@@ -27,7 +31,7 @@ export const AuthMiddleware: RequestHandler = async (req, res, next) => {
 
     if (!existingCustomer) {
       throw new AppError(
-        ErrorMessages.INVALID_TOKEN,
+        ApiErrorMessages.INVALID_TOKEN,
         HttpStatusCode.UNAUTHORIZED
       );
     }
@@ -43,6 +47,9 @@ export const AdminMiddleware: RequestHandler = (req, res, next) => {
   if (req.user && req.user.role === "admin") {
     next();
   } else {
-    throw new AppError(ErrorMessages.UNAUTHORIZED, HttpStatusCode.UNAUTHORIZED);
+    throw new AppError(
+      GlobalErrorMessages.UNAUTHORIZED,
+      HttpStatusCode.UNAUTHORIZED
+    );
   }
 };
