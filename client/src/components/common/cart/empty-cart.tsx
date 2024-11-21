@@ -1,16 +1,15 @@
 import { buttonVariants } from "@/components/ui/button";
 import { SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-
 import { PageHeading } from "../typography";
 import { ComponentFlexWrapper } from "../wrapper";
 import { Link } from "react-router-dom";
-import { ShoppingCart } from "../icons";
+import { ShoppingCartIcon } from "lucide-react";
 
 export default function EmptyCart() {
   return (
-    <ComponentFlexWrapper className="items-center h-screen">
-      <ShoppingCart />
+    <ComponentFlexWrapper className="items-center h-screen space-y-3">
+      <ShoppingCartIcon className="w-12 h-12" />
       <PageHeading>Your cart is empty</PageHeading>
       <SheetTrigger asChild>
         <Link
