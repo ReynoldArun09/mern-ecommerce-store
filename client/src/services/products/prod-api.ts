@@ -1,3 +1,4 @@
+import { ProductSchemaType } from "@/schemas/product-schema";
 import { AxiosError, axiosInstance } from "../axios";
 import {
   FeaturedResponse,
@@ -89,6 +90,66 @@ export const GetAllTargetAudienceProductsApi = async (
     const response = await axiosInstance.get(
       `/product/all-target?type=${type}&limit=${limit}&page=${page}`
     );
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.response?.data.message);
+    }
+    throw error;
+  }
+};
+
+export const GetAllProductApi = async (): Promise<ProductResponse[]> => {
+  try {
+    const response = await axiosInstance.get(`/product/all`);
+    return response.data.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.response?.data.message);
+    }
+    throw error;
+  }
+};
+
+export const DeleteProductApi = async (id: string) => {
+  try {
+    const response = await axiosInstance.delete(`/product/delete/${id}`);
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.response?.data.message);
+    }
+    throw error;
+  }
+};
+
+export const ToggleFeatureProductApi = async (id: string) => {
+  try {
+    const response = await axiosInstance.put(`/product/toggle/${id}`);
+    return response.data.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.response?.data.message);
+    }
+    throw error;
+  }
+};
+
+export const DisableProductApi = async (id: string) => {
+  try {
+    const response = await axiosInstance.put(`/product/disable/${id}`);
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.response?.data.message);
+    }
+    throw error;
+  }
+};
+
+export const CreateProductApi = async (values: ProductSchemaType) => {
+  try {
+    const response = await axiosInstance.post(`/product/create`, values);
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {

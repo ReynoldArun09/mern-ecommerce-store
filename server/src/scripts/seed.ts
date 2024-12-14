@@ -48,6 +48,7 @@ const seedUser = async () => {
     try {
       await mongoose.connect(mongoURI);
       logger.info("MongoDB connected");
+      await seedUser();
       await seedProducts();
       await mongoose.connection.close();
       process.exit(1);

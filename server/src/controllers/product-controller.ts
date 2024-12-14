@@ -54,7 +54,16 @@ export const GetFeaturedProducts = AsyncWrapper(
 
 export const CreateProduct = AsyncWrapper(
   async (req: Request, res: Response) => {
-    const { name, description, price, image, category } = req.body;
+    const {
+      name,
+      description,
+      price,
+      image,
+      category,
+      brand,
+      targetAudience,
+      stock,
+    } = req.body;
 
     const slug = slugify(name, {
       lower: true,
@@ -68,7 +77,7 @@ export const CreateProduct = AsyncWrapper(
       });
     }
 
-    const newProduct = await Product.create({
+    await Product.create({
       name,
       description,
       price,
@@ -77,11 +86,14 @@ export const CreateProduct = AsyncWrapper(
         ? cloudinaryResponse.secure_url
         : "",
       category,
+      brand,
+      targetAudience,
+      stock,
     });
 
     res.status(HttpStatusCode.CREATED).json({
       success: true,
-      data: newProduct,
+      message: ApiSuccessMessages.PRODUCT_CREATED_SUCCESS,
     });
   }
 );
@@ -227,5 +239,28 @@ export const GetProductsByTarget = AsyncWrapper(
         last: lastPage,
       },
     });
+  }
+);
+
+export const DisableProduct = AsyncWrapper(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const existingProduct = await Product.findById(id);
+
+    if (existingProduct) {
+      existingProduct.isActive = !existingProduct.isActive;
+      await existingProduct.save();
+      res.status(HttpStatusCode.OK).json({
+        success: true,
+        message: existingProduct.isActive
+          ? ApiSuccessMessages.PRODUCT_ENABLED
+          : ApiSuccessMessages.PRODUCT_DISABLED,
+      });
+    } else {
+      throw new AppError(
+        ApiErrorMessages.PRODUCT_NOT_FOUND,
+        HttpStatusCode.BAD_REQUEST
+      );
+    }
   }
 );

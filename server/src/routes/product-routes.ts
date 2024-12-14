@@ -27,11 +27,17 @@ productRoutes.delete(
 productRoutes.get("/all-category", product.GetProductsByCategory);
 productRoutes.get("/all-target", product.GetProductsByTarget);
 productRoutes.get("/recommendation", product.GetRecommendedProducts);
-productRoutes.patch(
+productRoutes.put(
   "/toggle/:id",
   AuthMiddleware,
   AdminMiddleware,
   product.ToggleFeaturedProduct
+);
+productRoutes.put(
+  "/disable/:id",
+  AuthMiddleware,
+  AdminMiddleware,
+  product.DisableProduct
 );
 productRoutes.get("/category-count", product.GetCategoriesAndProductCount);
 productRoutes.get("/single-product/:productId", product.GetSingleProduct);

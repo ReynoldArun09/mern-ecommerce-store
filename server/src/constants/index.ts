@@ -44,6 +44,9 @@ export enum ApiSuccessMessages {
   PRODUCT_DELETED_SUCCESS = "Product deleted successfully",
   CART_SYNC_SUCCESS = "Cart synchronized successfully",
   PURCHASE_SUCCESS = "payment successful",
+  PRODUCT_DISABLED = "Product disabled successfully",
+  PRODUCT_ENABLED = "Product enabled successfully",
+  PRODUCT_CREATED_SUCCESS = "Product created successfully",
 }
 
 export enum ApiErrorMessages {

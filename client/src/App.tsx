@@ -14,6 +14,8 @@ import PurchaseSuccessPage from "./pages/shop/purchase-success-page";
 import PurchaseCancelPage from "./pages/shop/purchase-cancel-page";
 import DashboardPage from "./pages/admin/dashboard-page";
 import AdminLayout from "./layouts/admin-layout";
+import ProductListPage from "./pages/admin/product-list-page/product-list-page";
+import CreateProductPage from "./pages/admin/create-products-page";
 
 export default function App() {
   const { data: isAuthenticated, isLoading } = useVerifyAuthApi();
@@ -42,6 +44,8 @@ export default function App() {
         }
       >
         <Route path="dashboard" element={<DashboardPage />} />
+        <Route path="products-list" element={<ProductListPage />} />
+        <Route path="create-product" element={<CreateProductPage />} />
       </Route>
       <Route
         path="/auth"

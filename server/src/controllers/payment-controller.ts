@@ -139,7 +139,7 @@ export const CheckoutSuccessApi = AsyncWrapper(
 
       await newOrders.save();
       res.status(HttpStatusCode.OK).json({
-        succesS: true,
+        success: true,
         message: ApiSuccessMessages.PURCHASE_SUCCESS,
         orderId: newOrders._id,
       });

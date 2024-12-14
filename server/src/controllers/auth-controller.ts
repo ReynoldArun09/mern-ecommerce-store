@@ -49,14 +49,14 @@ export const SignUpApi = AsyncWrapper(async (req: Request, res: Response) => {
 
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
-    sameSite: "none",
+    sameSite: "strict",
     secure: ParsedEnvVariables.NODE_ENV === "production",
     maxAge: 15 * 60 * 1000,
   });
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    sameSite: "none",
+    sameSite: "strict",
     secure: ParsedEnvVariables.NODE_ENV === "production",
     maxAge: 24 * 60 * 60 * 1000,
   });
@@ -109,14 +109,14 @@ export const SignInApi = AsyncWrapper(async (req: Request, res: Response) => {
 
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
-    sameSite: "none",
+    sameSite: "strict",
     secure: ParsedEnvVariables.NODE_ENV === "production",
     maxAge: 15 * 60 * 1000,
   });
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    sameSite: "none",
+    sameSite: "strict",
     secure: ParsedEnvVariables.NODE_ENV === "production",
     maxAge: 24 * 60 * 60 * 1000,
   });
@@ -160,7 +160,7 @@ export const RefreshTokenApi = AsyncWrapper(
 
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
-      sameSite: "none",
+      sameSite: "strict",
       secure: ParsedEnvVariables.NODE_ENV === "production",
       maxAge: 15 * 60 * 1000,
     });

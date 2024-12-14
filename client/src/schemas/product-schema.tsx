@@ -5,10 +5,12 @@ export const productSchema = z.object({
   description: z
     .string()
     .min(12, "Description must be at least 12 characters long"),
-  price: z.number(),
-  image: z.string(),
+  price: z.string(),
   category: z.string().min(1, "Category is Required"),
   brand: z.string().min(1, "Brand is Required"),
   targetAudience: z.enum(["Men", "Women"]),
-  stock: z.number(),
+  stock: z.string(),
+  image: z.string().optional(),
 });
+
+export type ProductSchemaType = z.infer<typeof productSchema>;

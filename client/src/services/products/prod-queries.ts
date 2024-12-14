@@ -1,12 +1,20 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import {
   GetAllCategoryProductsApi,
+  GetAllProductApi,
   GetAllTargetAudienceProductsApi,
   GetFeaturedProductsApi,
   GetPopularCategoryAndCountApi,
   GetRecommendedProductApi,
   GetSingleProductApi,
 } from "./prod-api";
+
+export function useGetAllProductsQuery() {
+  return useQuery({
+    queryKey: ["all-product-list"],
+    queryFn: GetAllProductApi,
+  });
+}
 
 export function useGetProductFeaturedQuery() {
   return useQuery({
