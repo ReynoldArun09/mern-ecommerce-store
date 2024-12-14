@@ -49,14 +49,14 @@ export const SignUpApi = AsyncWrapper(async (req: Request, res: Response) => {
 
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
-    sameSite: "strict",
+    sameSite: ParsedEnvVariables.NODE_ENV === "production" ? "none" : "strict",
     secure: ParsedEnvVariables.NODE_ENV === "production",
     maxAge: 15 * 60 * 1000,
   });
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    sameSite: "strict",
+    sameSite: ParsedEnvVariables.NODE_ENV === "production" ? "none" : "strict",
     secure: ParsedEnvVariables.NODE_ENV === "production",
     maxAge: 24 * 60 * 60 * 1000,
   });
@@ -109,14 +109,14 @@ export const SignInApi = AsyncWrapper(async (req: Request, res: Response) => {
 
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
-    sameSite: "strict",
+    sameSite: ParsedEnvVariables.NODE_ENV === "production" ? "none" : "strict",
     secure: ParsedEnvVariables.NODE_ENV === "production",
     maxAge: 15 * 60 * 1000,
   });
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    sameSite: "strict",
+    sameSite: ParsedEnvVariables.NODE_ENV === "production" ? "none" : "strict",
     secure: ParsedEnvVariables.NODE_ENV === "production",
     maxAge: 24 * 60 * 60 * 1000,
   });
@@ -142,7 +142,10 @@ export const RefreshTokenApi = AsyncWrapper(
     const refreshToken = req.cookies.refreshToken;
 
     if (!refreshToken) {
-      throw new AppError(ApiErrorMessages.INVALID_TOKEN, 401);
+      throw new AppError(
+        ApiErrorMessages.INVALID_TOKEN,
+        HttpStatusCode.UNAUTHORIZED
+      );
     }
 
     const decoded = jwt.verify(
@@ -160,7 +163,8 @@ export const RefreshTokenApi = AsyncWrapper(
 
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
-      sameSite: "strict",
+      sameSite:
+        ParsedEnvVariables.NODE_ENV === "production" ? "none" : "strict",
       secure: ParsedEnvVariables.NODE_ENV === "production",
       maxAge: 15 * 60 * 1000,
     });
