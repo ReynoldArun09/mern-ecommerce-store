@@ -1,11 +1,11 @@
-# 🚀 E-Commerce Store | MERN Application
+# 🚀 One stop - MERN Stack Ecommerce Application
 
-MERN-Ecommerce-Store web application built with MongoDB, Express, React, and Node.js, offering features like user authentication, product management, shopping cart, coupon, stripe payment.
+One Stop web application built with **MERN stack** (MongoDB, Express, React, Node.js). offering features like user authentication, admin dashboard, product management, shopping cart, coupon, stripe payment.
 
 ## 🔗 Links
 
 - Live Demo: https://one-stop-ecommerce.netlify.app/
-- Repository: https://github.com/ReynoldArun09/MERN-Ecommerce-Store
+- Repository: https://github.com/ReynoldArun09/mern-ecommerce-store
 
 ## 🛠️ Technologies Used
 
@@ -51,8 +51,8 @@ MERN-Ecommerce-Store web application built with MongoDB, Express, React, and Nod
 1. **Clone Repository**
 
    ```bash
-   git clone https://github.com/ReynoldArun09/MERN-Ecommerce-Store.git
-   cd MERN-Ecommerce-Store
+   git clone https://github.com/ReynoldArun09/mern-ecommerce-store
+   cd mern-ecommerce-store
    ```
 
 2. **Environment Configuration**
